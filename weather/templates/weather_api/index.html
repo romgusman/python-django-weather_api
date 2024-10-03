@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt_br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Search</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <form method="POST">
+            {% csrf_token %}
+            <select name="language" required onchange="this.form.submit()">
+                {% for lang in languages %}
+                    <option value="{{ lang }}" {% if lang == selected_language %}selected{% endif %}>{{ lang }}</option>
+                {% endfor %}
+            </select>
+        </form>
+    </div>
+
+    <div class="container mt-5">
+        <h1 class="text-center">Weather Search</h1>
+
+        <form method="POST" action="{% url 'index' %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="city">Enter City Name:</label>
+                <input type="text" class="form-control" id="city" name="city" placeholder="Type city name here..." required>
+            </div>
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+
+    <div class="mt-5">
+    {% if weather %}
+        <h2>Weather now in {{ weather.name }}, {{ weather.sys.country }}</h2>
+        <p>Temps in Celsius: {{ weather.main.temp_celsius }}°C</p>
+        <p>Temps in Fahrenheit: {{ weather.main.temp_fahrenheit }}°F</p>
+        <p>Temps in Kelvin: {{ weather.main.temp }}K</p>
+        <p>Descriptions: {{ weather.weather.0.description }}</p>
+    {% endif %}
+    </div>
+
+</body>
+</html>
